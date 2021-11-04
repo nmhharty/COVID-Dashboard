@@ -1,0 +1,240 @@
+---
+title: "Routt County COVID-19 Dashboard"
+author:
+- name: Nicole Harty, MPH
+  affiliation: Epidemiologist/Data Manager
+date: "`r format(Sys.time(), '%B %d, %Y, %I %p')`"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 5
+    css: template.css
+params:
+  DataThroughDate: "2021-10-31"
+  MostRecentWeekStart: "2021-10-25"
+  RouttPop: 25652
+  DataUpdateDate: "2021-11-02"
+  Internal: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(tidyverse)
+library(lubridate)
+library(kableExtra)
+library(ggplot2)
+library(plotly)
+library(janitor)
+library(imager)
+library(googlesheets4)
+library(DBI)
+library(odbc)
+library(openxlsx)
+
+RecentWeek <- interval(ymd(params$MostRecentWeekStart), ymd((as.Date(params$MostRecentWeekStart)+6)))
+Recent2Week <- interval(ymd(as.Date(params$MostRecentWeekStart)-7), ymd(as.Date(params$MostRecentWeekStart)+6))
+RollingRecentWeek <- interval((as.Date(params$DataThroughDate)-6), params$DataThroughDate)
+RollingRecent2Week <- interval((as.Date(params$DataThroughDate)-13), params$DataThroughDate)
+RollingRecent2WeekComparison <- interval((as.Date(params$DataThroughDate)-20), (as.Date(params$DataThroughDate)-7))
+RollingRecent1WeekComparison <- interval((as.Date(params$DataThroughDate)-13), (as.Date(params$DataThroughDate)-7))
+RollingRecent4Week <- interval((as.Date(params$DataThroughDate)-27), params$DataThroughDate)
+
+source("../Shared Resources/R Scripts/CalendarTable.R")
+source("../Shared Resources/R Scripts/RouttPopTables.R")
+source("../Shared Resources/R Scripts/TestResultsandCases.R")
+source("../Shared Resources/R Scripts/WeeklyTrackingSheet.R")
+source("../Shared Resources/R Scripts/Hospitalizations.R")
+source("../Shared Resources/R Scripts/Outbreaks.R")
+source("../Shared Resources/R Scripts/VaxData.R")
+source("../Shared Resources/R Scripts/SchoolsDrJData.R")
+source("../Shared Resources/R Scripts/Symptoms.R")
+
+```
+
+
+```{r label=logo}
+htmltools::img(src = knitr::image_uri("../Shared Resources/Images/RouttPHlogo.png"),
+alt = 'logo',
+style = 'position:absolute; top:105px; right:125px; padding:5px; width: 200px; height: 100px')
+```
+  
+# Introduction  
+This report includes cases reported to the Colorado Department of Public Health and Environment (CDPHE) and all PCR and antigen tests reported to CDPHE and Routt County Public Health through **`r format(as.Date(params$DataUpdateDate), '%B %d, %Y')`**.  
+  
+This dashboard is intended to provide residents and visitors information about the community health of Routt County. The data reported reflects information the Colorado Department of Public Health and the Environment (CDPHE) collects to determine the status of each county's COVID-19 virus suppression. The data presented here complements the <a href="https://covid19.colorado.gov/data" target="_blank">state's data dashboards</a> by including data that is only available locally and presenting thresholds in locally-relevant numbers.   
+
+On April 16, 2021, Gov. Polis devolved the Dial Framework that Colorado used to describe COVID-19 risk and outline restrictions in communities across Colorado. At this time, Routt County debuted the <a href="https://static1.squarespace.com/static/5e742162d4d8ad7a14a0b869/t/607a2bede01ee434d199ced3/1618619373865/Public+Health+Order+2020-05+County+Dial.Final.Recorded.pdf" target="_blank">"Routt Road to Recovery"</a> to outline the metrics necessary for Routt County's reopening as well as the metrics that would signify substantial risk and move the county into more restrictions.
+  
+|Recovery Level|Incidence|Positivity|Hospitalizations
+|-----|-----|-----|-----|
+|Low Risk|Fewer than 200 cases per 100,000 (<52 cases) in two weeks |Less than 5% |Sufficient local hospital capacity|
+|Caution|200-1000 cases per 100,000 (52-256 cases) in two weeks|5-10% |Sufficient local hospital capacity|
+|High Risk|More than 1000 cases per 100,000 (>256 cases) in two weeks|Greater than 10% | Local and/or regional hospitals at 85% or greater capacity|  
+
+**Routt County will qualify for moving to a new Recovery Level after meeting and sustaining the metrics for a new level for 7 consecutive days.** The metrics are calculated on a rolling basis. This means each day, the metric is recalculated for the most recent 14 days.  
+
+We urge our residents and visitors to take public health prevention measures seriously to keep our county safe, healthy, and open for business and community events. Please note that the dashboard reflects data up to and including two days prior to the update date. Cases are reported by date of testing, and results from some previous weeks' tests are still pending, so case counts could change.  
+
+For details on data sources, definitions, and terms, please see the [References and Definitions](#Definitions) section.  
+
+Data is updated three times per week, for all dates reported.    
+  
+# Key Metrics{#KeyMetrics}  
+The key metrics reflect the most recent two reporting weeks. For each indicator, the current two weeks are compared to the most recent prior two weeks. Here in Routt County, we are paying close attention to our test positivity rate and number of cases over two weeks. There is no single metric that tell us we are in a good or not good situation. However, **test positivity less than 5%** and/or **fewer than 52 cases in two weeks** will suggest we are in a good position.  
+
+```{r, child = "../Shared Resources/Child Rmd Files/RouttRoadToRecovery_Gauge.Rmd"}
+```
+
+```{r, child = "../Shared Resources/Child Rmd Files/MostRecent2Weeks1WeekSummary_Table.Rmd"}
+```
+
+## Vaccination Data
+Vaccination data comes from the Colorado Immunization Information System, CIIS. This data is specific to Routt County residents independent of where they received their vaccine and does not include vaccine doses delivered by Routt County providers to non-Routt County residents. Individual records in CIIS are attributed based upon address provided by the individual when receiving a vaccine and medical records systems that report into CIIS. Therefore, Routt County's vaccination rates are impacted by CIIS data quality.    
+"Completed Vaccine Series" means that an individual has received both doses of a two-dose COVID-19 vaccine (i.e. Moderna or Pfizer) or the single dose of a one-dose COVID-19 vaccine (i.e. Janssen/J&J).  
+  
+```{r label=VaxTableData, results = 'hide'}
+PtIZ %>%
+  # filter(Vaccine.Group.Dose.Number==1, age_at_1stvaccination>69) %>%
+  # count()
+  group_by(AgeGroup10yr, dosage_num) %>%
+  summarise(Total = n_distinct(patient_id))
+RouttPopTable %>%
+  filter(AgeGroup10yr %in% c("70-79", "80-89", "90 and over")) %>%
+  summarise(TotalPop=sum(TOTAL))
+
+PtIZ <- PtIZ %>% 
+  mutate(FullyVax = case_when(vaccination_code=="COVID-19 Vector-NR (JSN)" ~ "Yes",
+                              vaccination_code!="COVID-19 Vector-NR (JSN)"&dosage_num==2 ~ "Yes",
+                              TRUE ~ as.character("No"))) 
+PtIZ %>%
+  filter(FullyVax=="Yes"&age_at_1stvaccination>60) %>% 
+  count()
+
+PtIZ %>%
+  select(patient_id, age_at_1stvaccination) %>%
+  distinct() %>%
+  group_by(age_at_1stvaccination) %>%
+  count()
+
+```
+
+```{r, child = "../Shared Resources/Child Rmd Files/VaccinationRatesAgeGeog.Rmd"}
+```
+
+# Graphs  
+```{r, child = "../Shared Resources/Child Rmd Files/Incidence-Daily14dayRollingAvg.Rmd"}
+```
+
+```{r, child = "../Shared Resources/Child Rmd Files/Incidence-7dayRollingAvg.Rmd", eval = params$Internal}
+```
+
+```{r, child = "../Shared Resources/Child Rmd Files/Incidence-SchoolAgeNonSchoolAge14dayRolling.Rmd"}
+```
+
+```{r, child = "../Shared Resources/Child Rmd Files/Incidence-Weekly14dayRollingAvg.Rmd"}
+```
+
+```{r, child = "../Shared Resources/Child Rmd Files/IncidenceReportDate.Rmd", eval = params$Internal}
+```
+
+```{r, child = "../Shared Resources/Child Rmd Files/Positivity.Rmd"}
+```
+
+```{r, child = "../Shared Resources/Child Rmd Files/ResidentVisitorWeeklyCases.Rmd"}
+```
+
+```{r, child = "../Shared Resources/Child Rmd Files/PCRdelay.Rmd"}
+```
+    
+```{r, child = "../Shared Resources/Child Rmd Files/Outbreaks.Rmd"}
+```
+  
+# Surveillance    
+This section provides summaries of the type of transmission for cases and is shown for both Routt County visitors and residents. Data is available for cases **beginning October 12, 2020**. Unlike other sections of the dashboard that use CEDRS data for cases, the source data is Routt County Public Health case investigation which means some resident cases may be included here that are not yet in CEDRS or vice versa.    
+
+```{r, child = "../Shared Resources/Child Rmd Files/Surveillance-CaseOutcomes.Rmd"}
+```
+
+```{r, child = "../Shared Resources/Child Rmd Files/Surveillance-Symptoms.Rmd"}
+```
+
+```{r, child = "../Shared Resources/Child Rmd Files/Surveillance-ExposureTypeResidents.Rmd"}
+```
+
+```{r, child = "../Shared Resources/Child Rmd Files/Surveillance-ExposureTypeVisitors.Rmd"}
+```
+
+```{r, child = "../Shared Resources/Child Rmd Files/Surveillance-VaxEfficacy.Rmd"}
+```
+
+```{r, child = "../Shared Resources/Child Rmd Files/CICT Trends.Rmd", eval = params$Internal}
+```
+
+```{r, child = "../Shared Resources/Child Rmd Files/AllCasesSummary.Rmd"}
+```
+
+
+# References and Definitions{#Definitions} 
+## General Notes  
+Routt County Public Health presents all data (cases and tests) by the date of specimen collection. If there is no date of specimen collection, the date the case or test was reported is used. This differs from the reporting presented by CDPHE. CDPHE presents data based upon report date. This can lead to small differences in data between what is presented here and what is presented by CDPHE. You will see differences in cases per day between the state's dashboard and ours because of this difference in reporting methodology. We are using, and have always used, test collection date for our reporting because this better reflects disease onset and mirrors the start of isolation. Although our reporting methodology of using date of test collection means we are retroactively adding cases to prior dates, the advantage is that we avoid seeing artificial case spikes due to results from tests performed on different days being reported on the same day.
+  
+Cases are attributed to Routt County based upon the primary residence of the case. This means that short and long-term visitors to the county who are tested here are excluded from our charts. These cases are attributed to the individual's county of residence (in Colorado or another state). Similarly, if a Routt County resident tests positive in another state or county, they will be included in our case counts. Additionally, college and university students who have primary residence at the location of their college or university are attributed to the county of their college/university rather than Routt County.  
+
+On October 29, 2021, CDPHE updated their dashboards to use 2020 population estimates available from the US Census. Neither ZIP code level nor single-year age population estimates are available and Routt County's dashboard uses these more granular estimates in some figures. Therefore, Routt County's dashboard continues to use 2019 population estimates. If and when 2020 population estimates at the ZIP code level and/or single-year age are available, this dashboard will be updated.  
+  
+## Updates by Date  
+**October 25, 2021**: Refactored underlying code for dashboard leading to minor updates throughout, using different source file from CDPHE for cases and tests.       
+Added second positivity graph that shows positivity since September 2020 for PCR tests alone, provider-administered antigen tests alone, and the Routt County overall positivy rate (using the same calculation that has been used throughout the pandemic).  
+Updated positivity calculation to more appropriately exclude cases without a positive test.  
+Added case outcomes to surveillance section.  
+Added incidence rate by geography, most recent month to All Cases summary section.  
+**September 29, 2021**: Updated PCR Test Result Delay graph to group together all labs used by Routt County testing providers.  
+Updated data source for symptom information to more accurately account for missing data, moving from the CEDRS to the State of Colorado's contact tracing software, Dr. Justina.  
+**September 14, 2021**: Added incidence for school-age and non-school age residents  
+**June 25, 2021**: Added vaccination rates by geography.  
+**June 9, 2021**: Added 12 and older breakdown for vaccinations, consistent with the currently vaccine-eligible population.  
+**April 20, 2021**: Changed all graphs from CDPHE Dial Framework to Routt's Road to Recovery. Substantial updates made to graphs that show incidence and positivity. Removed graphs that present data in ways no longer relevant. Additional updates made to introductory table of metrics, key metrics section, and vaccinations section.   
+**April 6, 2021**: Updated PCR Test Result Delay graph to group together all labs used by Routt County testing providers. Vaccination table updated to show all age groups (15+) and highest-risk individuals (those aged 70+) to align with vaccine eligibility. While Phase 2 opens vaccine eligibility to everyone age 16+, population data for Routt County is only available for age 15+.    
+**March 25, 2021**: Updated dashboard to align with Dial 3.0 that was released March 24 by CDPHE. Changes include increasing the upper threshold for Level Green incidence to 35 per 100,000. The Dial 2.0 graphic was replaced by a Dial 3.0 graphic.  
+**March 7, 2021**: Changed vaccination data to capture single and 2-dase vaccines. Counts of "received one dose" include those who have received 1 dose of a 2-dose vaccine and those who have received a single dose of a 1-dose vaccine. Counts of "fully vaccinated" includes those who have received 2 doses of a 2-dose vaccine and those who have received one dose of a 1-dose vaccine.  
+**February 9, 2021**: Updated data source for hospitalizations.  
+**Februrary 7, 2021**: Updated dashboard to align with Dial 2.0 that was released on February 6 by CDPHE.  
+Changes include adding a second "key metrics" graphic for Dial 2.0, adding 7-day incidence thresholds to the Cases Per Week graph, removing thresholds from the 14-day incidence graph, and updating the positivity and tests per day graph to use 7-day averages and include the updated positivity thresholds.  
+The Dial 1.0 key metrics graphic remains for comparison purposes.  
+**February 4, 2021**: Updated COVID-19 Vaccination section to include age-specific information.  Updated outbreak bar chart to show all outbreaks since September 1, 2020 as well as just those from the past 4 weeks and changed to be a proportion of outbreaks rather than count.  Added disclaimer on charts: "data prepared by Routt County Public Health".  
+**February 2, 2021**: Added COVID-19 Vaccination section that includes the number of Routt County residents who have received at least one dose of a COVID-19 vaccine and the total number of doses received by Routt County residents.  
+**December 22, 2020**: Updated outbreak categories to better align with categories used by CDPHE.  
+Changed outbreak pie chart to a histogram to better display the information.  
+**December 15, 2020**: Added +/- 5% error bars to 7-day and 14-day incidence graphs to provide an indication of meaningful difference.  
+**December 6, 2020**: Added box and whisker plot of outbreak-associated cases.  
+Changed geographic distribution of cases graph to show per capita cumulative incidence.  
+Added more descriptive hover text for 14-Day Incidence graph.  
+Added Test Results Delay graph back to dashboard. Updated to account for changes to labs used by various providers.  
+**December 3, 2020**: Updated hospitalizations Key Metrics figure to align with update to the state's COVID-19 dial dashboard.  
+**December 1, 2020**: Added a graph of the proportion of cases that are symptomatic versus asymptomatic.  
+**November 29, 2020**: Added weekly case count of Long-Term Care Facility resident cases to Number of Cases per Week graph.  
+Added chart of number of people associated with outbreaks in addition to the number of outbreaks to the [Outbreaks](#Outbreaks) section.  
+**November 20, 2020**: Updated reporting frequency and timeline. Dashboard will now be updated three times per week. All graphs representing weekly data continue to present data through the most recent completed reporting week (Monday through Sunday). All graphs presenting daily data along with the Key Metrics include data through two days prior to present.  
+Collapsed most recent week and most recent two weeks summary sections into one and presented as a table.  
+Edited references to the CDPHE Dial to align with the updated dial released November 17, 2020.  
+Added count of total COVID-19 hospitalizations to date among Routt County residents.  
+Removed graph of Test Result Delay because most tests in the county are now run through labs other than the CDPHE State Lab. Many community providers are using the UCHealth/University lab and Public Health is using a private lab.   
+**November 6, 2020**: Added geographic distribution of cases to date. Added table of case counts by attribution date.    
+**November 3, 2020**: Changed line on Weekly Number of Cases graph to be the 7-day incidence rate per 100,000. Updated deduplication process for daily test count. Added gender breakdown for last two weeks and age breakdown for all cases compared to Routt County population.    
+**October 27, 2020**: Visitor cases added to the dashboard. Routt County Public Health has complete and accurate data on visitor cases beginning September 21, 2020, so only visitor cases from this date forward are included on this dashboard. Changed the calculation for test positivity rate to be total number of cases in most recent 14 days divided by total number of tests in most recent 14 days. This update affects the positivity graph *but not* the key metrics positivity rate.  
+**October 13, 2020**: New dashboard was first published.    
+**September 21, 2020**: Routt County Public Health began adding antigen tests into the count of tests performed in the community.  
+**August 17, 2020**: Antigen positive test results added to the case definition for probable cases. All antigen positive test results after this date are included as probable cases in our case counts.  
+
+## Definitions  
+**Cases** - all confirmed and probable cases are included in case counts. We are not including suspect cases. Antigen positive tests are included as a probable case for antigen tests completed on or after August 17, 2020. Routt County Public Health follows the case definition used by the Colorado department of Public Health and Environment, which is available here: <a href="https://docs.google.com/document/d/1e-IWLtzJNCgI2gzPONGvEASGgse85WuBmcToc9ev-74/edit " target="_blank">https://docs.google.com/document/d/1e-IWLtzJNCgI2gzPONGvEASGgse85WuBmcToc9ev-74/edit </a>   
+**CDPHE** - Colorado Department of Public Health and Environment  
+**Completed Vaccination Series**: A common term for describing that an individual has received all necessary doses of a vaccination series. This is often used in describing childhood immunizations that require multiple doses. There are COVID-19 vaccines that require only one dose as well as vaccines that require two doses. Having "completed the COVID-19 vaccination series" means an individual has received both doses of a 2-dose vaccine or one dose of a single-dose vaccine.  
+**Fully Vaccinated**: An individual is fully vaccinated when a full 14 days have passed since they completed the COVID-19 vaccination series. More information: <a href="https://www.cdc.gov/coronavirus/2019-ncov/vaccines/fully-vaccinated.html" target="_blank">https://www.cdc.gov/coronavirus/2019-ncov/vaccines/fully-vaccinated.html</a>    
+**Incidence** - Incidence is the number of new cases of a disease for a specific time period. Sometimes it is presented as a rate (incidence rate), such as the number of cases per 100,000 population. Incidence rates are helpful in comparing different communities to each other.  
+**Outbreak** - outbreak status is determined by epidemiologic case definition. Through June 30, 2021, an outbreak was defined as two or more cases of COVID-19 among non-household members associated with the same event or facility within a 14-day period. Beginning July 1, 2021, CDPHE updated the outbreak definition such that an outbreak in any setting other than residential care facilities or corrections requires at least 5 non-household members. Two or more cases in residential care facilities or corrections continues to meet outbreak definition.  
+**Resident** - Individuals whose permanent address is in Routt County, excluding college students who are attending school outside of Routt County. Resident cases also includes individuals who reside in Routt County at least 6 months of the year.   
+**Tests** - there are many tests for COVID-19 that each fall into one of three categories: PCR, antigen, or antibody. Both PCR and antigen tests are used to diagnose active COVID-19 infections. PCR tests detect  viral genetic material, while antigen tests detect viral proteins. Antibody tests identify previous infections. We include both PCR and antigen tests (beginning September 21, 2020) in our total tests counts.  
+**Test Positivity** - a measure of the proportion of tests conducted that result in a positive test. PCR tests are generally used for this metric. We are using both PCR tests and antigen tests (beginning September 21, 2020) for the denominator of this percentage. The numerator is the number of people who tested positive.  
+**Visitor** - Individuals who received a COVID-19 test from a Routt County provider and spent time in Routt County while infectious.
