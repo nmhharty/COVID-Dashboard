@@ -2,7 +2,7 @@
 #First authored 10/18/2021 by Nicole Harty
 #Last update: 10/18/2021
 #
-#library(tidyverse)
+library(tidyverse)
 library(lubridate)
 library(kableExtra)
 library(ggplot2)
@@ -16,17 +16,17 @@ library(openxlsx)
 
 
 ##Set Parameters
-INTERNALparameters <- list(DataThroughDate = "2021-10-31",
+INTERNALparameters <- list(DataThroughDate = "2021-11-06",
      MostRecentWeekStart = "2021-10-25",
      RouttPop = 25652,
-     DataUpdateDate = "2021-11-02",
+     DataUpdateDate = "2021-11-08",
      Internal = TRUE)
 
 
-PUBLICparameters <- list(DataThroughDate = "2021-10-31",
+PUBLICparameters <- list(DataThroughDate = "2021-11-06",
                          MostRecentWeekStart = "2021-10-25",
                          RouttPop = 25652,
-                         DataUpdateDate = "2021-11-02",
+                         DataUpdateDate = "2021-11-08",
                            Internal = FALSE)
 
 #use below when testing/troubleshooting indiv RMD files
@@ -39,7 +39,7 @@ PUBLICparameters <- list(DataThroughDate = "2021-10-31",
 # INTERNAL Dashboard --------------------------------------------------
 
 rmarkdown::render(
-  'PublicDashboard_PARENT.Rmd',
+  'Dashboard_PARENT.Rmd',
   output_file = paste0('INTERNAL Routt County COVID Dashboard.html'),
   params = INTERNALparameters,
   envir = parent.frame()
@@ -48,7 +48,7 @@ rmarkdown::render(
 # PUBLIC Dashboard --------------------------------------------------
 
 rmarkdown::render(
-  'PublicDashboard_PARENT.Rmd',
+  'Dashboard_PARENT.Rmd',
   output_file = paste0('PUBLIC Routt County COVID Dashboard.html'),
   params = PUBLICparameters,
   envir = parent.frame()

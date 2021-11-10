@@ -11,10 +11,10 @@ output:
     toc_depth: 5
     css: template.css
 params:
-  DataThroughDate: "2021-10-31"
+  DataThroughDate: "2021-11-03"
   MostRecentWeekStart: "2021-10-25"
   RouttPop: 25652
-  DataUpdateDate: "2021-11-02"
+  DataUpdateDate: "2021-11-05"
   Internal: TRUE
 ---
 
@@ -40,21 +40,21 @@ RollingRecent2WeekComparison <- interval((as.Date(params$DataThroughDate)-20), (
 RollingRecent1WeekComparison <- interval((as.Date(params$DataThroughDate)-13), (as.Date(params$DataThroughDate)-7))
 RollingRecent4Week <- interval((as.Date(params$DataThroughDate)-27), params$DataThroughDate)
 
-source("../Shared Resources/R Scripts/CalendarTable.R")
-source("../Shared Resources/R Scripts/RouttPopTables.R")
-source("../Shared Resources/R Scripts/TestResultsandCases.R")
-source("../Shared Resources/R Scripts/WeeklyTrackingSheet.R")
-source("../Shared Resources/R Scripts/Hospitalizations.R")
-source("../Shared Resources/R Scripts/Outbreaks.R")
-source("../Shared Resources/R Scripts/VaxData.R")
-source("../Shared Resources/R Scripts/SchoolsDrJData.R")
-source("../Shared Resources/R Scripts/Symptoms.R")
+source("../Shared-Resources/R Scripts/CalendarTable.R")
+source("../Shared-Resources/R Scripts/RouttPopTables.R")
+source("../Shared-Resources/R Scripts/TestResultsandCases.R")
+source("../Shared-Resources/R Scripts/WeeklyTrackingSheet.R")
+source("../Shared-Resources/R Scripts/Hospitalizations.R")
+source("../Shared-Resources/R Scripts/Outbreaks.R")
+source("../Shared-Resources/R Scripts/VaxData.R")
+source("../Shared-Resources/R Scripts/SchoolsDrJData.R")
+source("../Shared-Resources/R Scripts/Symptoms.R")
 
 ```
 
 
 ```{r label=logo}
-htmltools::img(src = knitr::image_uri("../Shared Resources/Images/RouttPHlogo.png"),
+htmltools::img(src = knitr::image_uri("../Shared-Resources/Images/RouttPHlogo.png"),
 alt = 'logo',
 style = 'position:absolute; top:105px; right:125px; padding:5px; width: 200px; height: 100px')
 ```
@@ -83,10 +83,10 @@ Data is updated three times per week, for all dates reported.
 # Key Metrics{#KeyMetrics}  
 The key metrics reflect the most recent two reporting weeks. For each indicator, the current two weeks are compared to the most recent prior two weeks. Here in Routt County, we are paying close attention to our test positivity rate and number of cases over two weeks. There is no single metric that tell us we are in a good or not good situation. However, **test positivity less than 5%** and/or **fewer than 52 cases in two weeks** will suggest we are in a good position.  
 
-```{r, child = "../Shared Resources/Child Rmd Files/RouttRoadToRecovery_Gauge.Rmd"}
+```{r, child = "../Shared-Resources/Child Rmd Files/RouttRoadToRecovery_Gauge.Rmd"}
 ```
 
-```{r, child = "../Shared Resources/Child Rmd Files/MostRecent2Weeks1WeekSummary_Table.Rmd"}
+```{r, child = "../Shared-Resources/Child Rmd Files/MostRecent2Weeks1WeekSummary_Table.Rmd"}
 ```
 
 ## Vaccination Data
@@ -119,59 +119,59 @@ PtIZ %>%
 
 ```
 
-```{r, child = "../Shared Resources/Child Rmd Files/VaccinationRatesAgeGeog.Rmd"}
+```{r, child = "../Shared-Resources/Child Rmd Files/VaccinationRatesAgeGeog.Rmd"}
 ```
 
 # Graphs  
-```{r, child = "../Shared Resources/Child Rmd Files/Incidence-Daily14dayRollingAvg.Rmd"}
+```{r, child = "../Shared-Resources/Child Rmd Files/Incidence-Daily14dayRollingAvg.Rmd"}
 ```
 
-```{r, child = "../Shared Resources/Child Rmd Files/Incidence-7dayRollingAvg.Rmd", eval = params$Internal}
+```{r, child = "../Shared-Resources/Child Rmd Files/Incidence-7dayRollingAvg.Rmd", eval = params$Internal}
 ```
 
-```{r, child = "../Shared Resources/Child Rmd Files/Incidence-SchoolAgeNonSchoolAge14dayRolling.Rmd"}
+```{r, child = "../Shared-Resources/Child Rmd Files/Incidence-SchoolAgeNonSchoolAge14dayRolling.Rmd"}
 ```
 
-```{r, child = "../Shared Resources/Child Rmd Files/Incidence-Weekly14dayRollingAvg.Rmd"}
+```{r, child = "../Shared-Resources/Child Rmd Files/Incidence-Weekly14dayRollingAvg.Rmd"}
 ```
 
-```{r, child = "../Shared Resources/Child Rmd Files/IncidenceReportDate.Rmd", eval = params$Internal}
+```{r, child = "../Shared-Resources/Child Rmd Files/IncidenceReportDate.Rmd", eval = params$Internal}
 ```
 
-```{r, child = "../Shared Resources/Child Rmd Files/Positivity.Rmd"}
+```{r, child = "../Shared-Resources/Child Rmd Files/Positivity.Rmd"}
 ```
 
-```{r, child = "../Shared Resources/Child Rmd Files/ResidentVisitorWeeklyCases.Rmd"}
+```{r, child = "../Shared-Resources/Child Rmd Files/ResidentVisitorWeeklyCases.Rmd"}
 ```
 
-```{r, child = "../Shared Resources/Child Rmd Files/PCRdelay.Rmd"}
+```{r, child = "../Shared-Resources/Child Rmd Files/PCRdelay.Rmd"}
 ```
     
-```{r, child = "../Shared Resources/Child Rmd Files/Outbreaks.Rmd"}
+```{r, child = "../Shared-Resources/Child Rmd Files/Outbreaks.Rmd"}
 ```
   
 # Surveillance    
 This section provides summaries of the type of transmission for cases and is shown for both Routt County visitors and residents. Data is available for cases **beginning October 12, 2020**. Unlike other sections of the dashboard that use CEDRS data for cases, the source data is Routt County Public Health case investigation which means some resident cases may be included here that are not yet in CEDRS or vice versa.    
 
-```{r, child = "../Shared Resources/Child Rmd Files/Surveillance-CaseOutcomes.Rmd"}
+```{r, child = "../Shared-Resources/Child Rmd Files/Surveillance-CaseOutcomes.Rmd"}
 ```
 
-```{r, child = "../Shared Resources/Child Rmd Files/Surveillance-Symptoms.Rmd"}
+```{r, child = "../Shared-Resources/Child Rmd Files/Surveillance-Symptoms.Rmd"}
 ```
 
-```{r, child = "../Shared Resources/Child Rmd Files/Surveillance-ExposureTypeResidents.Rmd"}
+```{r, child = "../Shared-Resources/Child Rmd Files/Surveillance-ExposureTypeResidents.Rmd"}
 ```
 
-```{r, child = "../Shared Resources/Child Rmd Files/Surveillance-ExposureTypeVisitors.Rmd"}
+```{r, child = "../Shared-Resources/Child Rmd Files/Surveillance-ExposureTypeVisitors.Rmd"}
 ```
 
-```{r, child = "../Shared Resources/Child Rmd Files/Surveillance-VaxEfficacy.Rmd"}
+```{r, child = "../Shared-Resources/Child Rmd Files/Surveillance-VaxEfficacy.Rmd"}
 ```
 
-```{r, child = "../Shared Resources/Child Rmd Files/CICT Trends.Rmd", eval = params$Internal}
+```{r, child = "../Shared-Resources/Child Rmd Files/CICT Trends.Rmd", eval = params$Internal}
 ```
 
-```{r, child = "../Shared Resources/Child Rmd Files/AllCasesSummary.Rmd"}
+```{r, child = "../Shared-Resources/Child Rmd Files/AllCasesSummary.Rmd"}
 ```
 
 
@@ -184,7 +184,8 @@ Cases are attributed to Routt County based upon the primary residence of the cas
 On October 29, 2021, CDPHE updated their dashboards to use 2020 population estimates available from the US Census. Neither ZIP code level nor single-year age population estimates are available and Routt County's dashboard uses these more granular estimates in some figures. Therefore, Routt County's dashboard continues to use 2019 population estimates. If and when 2020 population estimates at the ZIP code level and/or single-year age are available, this dashboard will be updated.  
   
 ## Updates by Date  
-**October 25, 2021**: Refactored underlying code for dashboard leading to minor updates throughout, using different source file from CDPHE for cases and tests.       
+**November 5, 2021**: Refactored underlying code for dashboard leading to minor updates throughout, using different source file from CDPHE for cases and tests.       
+Added vaccination rates for 5-11 year olds.
 Added second positivity graph that shows positivity since September 2020 for PCR tests alone, provider-administered antigen tests alone, and the Routt County overall positivy rate (using the same calculation that has been used throughout the pandemic).  
 Updated positivity calculation to more appropriately exclude cases without a positive test.  
 Added case outcomes to surveillance section.  
