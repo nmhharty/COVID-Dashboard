@@ -1,5 +1,5 @@
-# OVERRIDE DEFAULTS - ignore HTML files that are the rendered markdown files
-*.html
+# OVERRIDE DEFAULTS - ignore internal HTML file that is the rendered markdown file
+INTERNAL Routt County COVID Dashboard.html
 *.dcf
 
 
