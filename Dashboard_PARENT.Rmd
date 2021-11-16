@@ -11,10 +11,10 @@ output:
     toc_depth: 5
     css: template.css
 params:
-  DataThroughDate: "2021-11-03"
-  MostRecentWeekStart: "2021-10-25"
+  DataThroughDate: "2021-11-13"
+  MostRecentWeekStart: "2021-11-08"
   RouttPop: 25652
-  DataUpdateDate: "2021-11-05"
+  DataUpdateDate: "2021-11-15"
   Internal: TRUE
 ---
 
@@ -84,6 +84,9 @@ Data is updated three times per week, for all dates reported.
 The key metrics reflect the most recent two reporting weeks. For each indicator, the current two weeks are compared to the most recent prior two weeks. Here in Routt County, we are paying close attention to our test positivity rate and number of cases over two weeks. There is no single metric that tell us we are in a good or not good situation. However, **test positivity less than 5%** and/or **fewer than 52 cases in two weeks** will suggest we are in a good position.  
 
 ```{r, child = "../Shared-Resources/Child Rmd Files/RouttRoadToRecovery_Gauge.Rmd"}
+```
+
+```{r, child = "../Shared-Resources/Child Rmd Files/CaseSummaryToDate.Rmd"}
 ```
 
 ```{r, child = "../Shared-Resources/Child Rmd Files/MostRecent2Weeks1WeekSummary_Table.Rmd"}

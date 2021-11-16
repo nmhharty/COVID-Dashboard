@@ -16,24 +16,24 @@ library(openxlsx)
 
 
 ##Set Parameters
-INTERNALparameters <- list(DataThroughDate = "2021-11-06",
-     MostRecentWeekStart = "2021-10-25",
+INTERNALparameters <- list(DataThroughDate = "2021-11-13",
+     MostRecentWeekStart = "2021-11-01",
      RouttPop = 25652,
-     DataUpdateDate = "2021-11-08",
+     DataUpdateDate = "2021-11-15",
      Internal = TRUE)
 
 
-PUBLICparameters <- list(DataThroughDate = "2021-11-06",
-                         MostRecentWeekStart = "2021-10-25",
+PUBLICparameters <- list(DataThroughDate = "2021-11-13",
+                         MostRecentWeekStart = "2021-11-01",
                          RouttPop = 25652,
-                         DataUpdateDate = "2021-11-08",
+                         DataUpdateDate = "2021-11-15",
                            Internal = FALSE)
 
 #use below when testing/troubleshooting indiv RMD files
-# params <- list(DataThroughDate = "2021-10-31",
-#                MostRecentWeekStart = "2021-10-25",
+# params <- list(DataThroughDate = "2021-11-08",
+#                MostRecentWeekStart = "2021-11-01",
 #                RouttPop = 25652,
-#                DataUpdateDate = "2021-11-02",
+#                DataUpdateDate = "2021-11-10",
 #                          Internal = FALSE)
 
 # INTERNAL Dashboard --------------------------------------------------
@@ -53,9 +53,6 @@ rmarkdown::render(
   params = PUBLICparameters,
   envir = parent.frame()
 )
-
-
-
 
 
 # Copy HTML to Shiny folders ----------------------------------------------
