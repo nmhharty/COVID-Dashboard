@@ -16,25 +16,25 @@ library(openxlsx)
 
 
 ##Set Parameters
-INTERNALparameters <- list(DataThroughDate = "2021-11-13",
-     MostRecentWeekStart = "2021-11-01",
+INTERNALparameters <- list(DataThroughDate = "2022-01-21",
+     MostRecentWeekStart = "2022-01-17",
      RouttPop = 25652,
-     DataUpdateDate = "2021-11-15",
+     DataUpdateDate = "2022-01-23",
      Internal = TRUE)
 
 
-PUBLICparameters <- list(DataThroughDate = "2021-11-13",
-                         MostRecentWeekStart = "2021-11-01",
+PUBLICparameters <- list(DataThroughDate = "2022-01-21",
+                         MostRecentWeekStart = "2022-01-10",
                          RouttPop = 25652,
-                         DataUpdateDate = "2021-11-15",
+                         DataUpdateDate = "2022-01-23",
                            Internal = FALSE)
 
 #use below when testing/troubleshooting indiv RMD files
-# params <- list(DataThroughDate = "2021-11-08",
-#                MostRecentWeekStart = "2021-11-01",
+# params <- list(DataThroughDate = "2022-01-07",
+#                MostRecentWeekStart = "2022-01-03",
 #                RouttPop = 25652,
-#                DataUpdateDate = "2021-11-10",
-#                          Internal = FALSE)
+#                DataUpdateDate = "2022-01-09",
+#                Internal = FALSE)
 
 # INTERNAL Dashboard --------------------------------------------------
 
@@ -44,9 +44,11 @@ rmarkdown::render(
   params = INTERNALparameters,
   envir = parent.frame()
 )
+# Copy HTML to Shiny folder
+file.copy("INTERNAL Routt County COVID Dashboard.html", "INTERNAL Dashboard", overwrite = TRUE)
 
 # PUBLIC Dashboard --------------------------------------------------
-
+# 
 rmarkdown::render(
   'Dashboard_PARENT.Rmd',
   output_file = paste0('PUBLIC Routt County COVID Dashboard.html'),
@@ -54,10 +56,10 @@ rmarkdown::render(
   envir = parent.frame()
 )
 
+# Copy HTML to Shiny folder
 
-# Copy HTML to Shiny folders ----------------------------------------------
-file.copy("INTERNAL Routt County COVID Dashboard.html", "INTERNAL Dashboard", overwrite = TRUE)
 file.copy("PUBLIC Routt County COVID Dashboard.html", "PUBLIC Dashboard", overwrite = TRUE)
+
 
 # Deploy Apps -------------------------------------------------------------
 
@@ -71,7 +73,6 @@ deployApp(
   forceUpdate = TRUE
 )
 
-
 #PUBLIC
 deployApp(
   appDir = "PUBLIC Dashboard",
@@ -81,3 +82,4 @@ deployApp(
 )
 
 
+  

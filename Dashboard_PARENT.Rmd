@@ -11,10 +11,10 @@ output:
     toc_depth: 5
     css: template.css
 params:
-  DataThroughDate: "2021-11-13"
-  MostRecentWeekStart: "2021-11-08"
+  DataThroughDate: "2021-12-30"
+  MostRecentWeekStart: "2021-12-27"
   RouttPop: 25652
-  DataUpdateDate: "2021-11-15"
+  DataUpdateDate: "2022-01-02"
   Internal: TRUE
 ---
 
@@ -187,6 +187,9 @@ Cases are attributed to Routt County based upon the primary residence of the cas
 On October 29, 2021, CDPHE updated their dashboards to use 2020 population estimates available from the US Census. Neither ZIP code level nor single-year age population estimates are available and Routt County's dashboard uses these more granular estimates in some figures. Therefore, Routt County's dashboard continues to use 2019 population estimates. If and when 2020 population estimates at the ZIP code level and/or single-year age are available, this dashboard will be updated.  
   
 ## Updates by Date  
+**January 24, 2022**: Updated methodology for calculating vaccination number and percent to account for data nuances. This led to a decrease in the number and percentage of residents with one dose of a vaccine, but did not impact the number and percent fully vaccinated.  
+**November 30, 2021**: Began updating dashboard after 4pm Sunday, Tuesday, and Thursday to better capture the data update frequency of source files.  
+**November 19, 2021**: Received historical data on vaccination that added 10% more vaccine breakthrough cases.  
 **November 5, 2021**: Refactored underlying code for dashboard leading to minor updates throughout, using different source file from CDPHE for cases and tests.       
 Added vaccination rates for 5-11 year olds.
 Added second positivity graph that shows positivity since September 2020 for PCR tests alone, provider-administered antigen tests alone, and the Routt County overall positivy rate (using the same calculation that has been used throughout the pandemic).  
