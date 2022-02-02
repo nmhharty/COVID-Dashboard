@@ -11,10 +11,10 @@ output:
     toc_depth: 5
     css: template.css
 params:
-  DataThroughDate: "2021-12-30"
-  MostRecentWeekStart: "2021-12-27"
+  DataThroughDate: "2022-01-21"
+  MostRecentWeekStart: "2022-01-17"
   RouttPop: 25652
-  DataUpdateDate: "2022-01-02"
+  DataUpdateDate: "2022-01-23"
   Internal: TRUE
 ---
 
@@ -64,15 +64,6 @@ This report includes cases reported to the Colorado Department of Public Health 
   
 This dashboard is intended to provide residents and visitors information about the community health of Routt County. The data reported reflects information the Colorado Department of Public Health and the Environment (CDPHE) collects to determine the status of each county's COVID-19 virus suppression. The data presented here complements the <a href="https://covid19.colorado.gov/data" target="_blank">state's data dashboards</a> by including data that is only available locally and presenting thresholds in locally-relevant numbers.   
 
-On April 16, 2021, Gov. Polis devolved the Dial Framework that Colorado used to describe COVID-19 risk and outline restrictions in communities across Colorado. At this time, Routt County debuted the <a href="https://static1.squarespace.com/static/5e742162d4d8ad7a14a0b869/t/607a2bede01ee434d199ced3/1618619373865/Public+Health+Order+2020-05+County+Dial.Final.Recorded.pdf" target="_blank">"Routt Road to Recovery"</a> to outline the metrics necessary for Routt County's reopening as well as the metrics that would signify substantial risk and move the county into more restrictions.
-  
-|Recovery Level|Incidence|Positivity|Hospitalizations
-|-----|-----|-----|-----|
-|Low Risk|Fewer than 200 cases per 100,000 (<52 cases) in two weeks |Less than 5% |Sufficient local hospital capacity|
-|Caution|200-1000 cases per 100,000 (52-256 cases) in two weeks|5-10% |Sufficient local hospital capacity|
-|High Risk|More than 1000 cases per 100,000 (>256 cases) in two weeks|Greater than 10% | Local and/or regional hospitals at 85% or greater capacity|  
-
-**Routt County will qualify for moving to a new Recovery Level after meeting and sustaining the metrics for a new level for 7 consecutive days.** The metrics are calculated on a rolling basis. This means each day, the metric is recalculated for the most recent 14 days.  
 
 We urge our residents and visitors to take public health prevention measures seriously to keep our county safe, healthy, and open for business and community events. Please note that the dashboard reflects data up to and including two days prior to the update date. Cases are reported by date of testing, and results from some previous weeks' tests are still pending, so case counts could change.  
 
@@ -135,7 +126,7 @@ PtIZ %>%
 ```{r, child = "../Shared-Resources/Child Rmd Files/Incidence-SchoolAgeNonSchoolAge14dayRolling.Rmd"}
 ```
 
-```{r, child = "../Shared-Resources/Child Rmd Files/Incidence-Weekly14dayRollingAvg.Rmd"}
+```{r, child = "../Shared-Resources/Child Rmd Files/Incidence-Weekly14dayRollingAvg.Rmd", eval = params$Internal}
 ```
 
 ```{r, child = "../Shared-Resources/Child Rmd Files/IncidenceReportDate.Rmd", eval = params$Internal}
@@ -144,10 +135,10 @@ PtIZ %>%
 ```{r, child = "../Shared-Resources/Child Rmd Files/Positivity.Rmd"}
 ```
 
-```{r, child = "../Shared-Resources/Child Rmd Files/ResidentVisitorWeeklyCases.Rmd"}
+```{r, child = "../Shared-Resources/Child Rmd Files/ResidentVisitorWeeklyCases.Rmd", eval = params$Internal}
 ```
 
-```{r, child = "../Shared-Resources/Child Rmd Files/PCRdelay.Rmd"}
+```{r, child = "../Shared-Resources/Child Rmd Files/PCRdelay.Rmd", eval = params$Internal}
 ```
     
 ```{r, child = "../Shared-Resources/Child Rmd Files/Outbreaks.Rmd"}
