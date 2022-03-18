@@ -16,24 +16,24 @@ library(openxlsx)
 
 
 ##Set Parameters
-INTERNALparameters <- list(DataThroughDate = "2022-01-30",
-     MostRecentWeekStart = "2022-01-24",
+INTERNALparameters <- list(DataThroughDate = "2022-03-15",
+     MostRecentWeekStart = "2022-03-07",
      RouttPop = 25652,
-     DataUpdateDate = "2022-02-01",
+     DataUpdateDate = "2022-03-17",
      Internal = TRUE)
 
 
-PUBLICparameters <- list(DataThroughDate = "2022-01-30",
-                         MostRecentWeekStart = "2022-01-24",
+PUBLICparameters <- list(DataThroughDate = "2022-03-15",
+                         MostRecentWeekStart = "2022-03-07",
                          RouttPop = 25652,
-                         DataUpdateDate = "2022-02-01",
+                         DataUpdateDate = "2022-03-17",
                            Internal = FALSE)
 
 #use below when testing/troubleshooting indiv RMD files
-# params <- list(DataThroughDate = "2022-01-25",
-#                MostRecentWeekStart = "2022-01-17",
+# params <- list(DataThroughDate = "2022-03-02",
+#                MostRecentWeekStart = "2022-02-21",
 #                RouttPop = 25652,
-#                DataUpdateDate = "2022-01-27",
+#                DataUpdateDate = "2022-03-01",
 #                Internal = FALSE)
 
 # INTERNAL Dashboard --------------------------------------------------
@@ -80,3 +80,4 @@ deployApp(
   appId = 3283594,
   forceUpdate = TRUE
 )
+

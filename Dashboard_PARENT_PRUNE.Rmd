@@ -11,10 +11,10 @@ output:
     toc_depth: 5
     css: template.css
 params:
-  DataThroughDate: "2022-01-21"
-  MostRecentWeekStart: "2022-01-17"
+  DataThroughDate: "2022-03-02"
+  MostRecentWeekStart: "2022-02-21"
   RouttPop: 25652
-  DataUpdateDate: "2022-01-23"
+  DataUpdateDate: "2022-03-02"
   Internal: TRUE
 ---
 
@@ -58,21 +58,32 @@ htmltools::img(src = knitr::image_uri("../Shared-Resources/Images/RouttPHlogo.pn
 alt = 'logo',
 style = 'position:absolute; top:105px; right:125px; padding:5px; width: 200px; height: 100px')
 ```
-  
-# Introduction  
-This report includes cases reported to the Colorado Department of Public Health and Environment (CDPHE) and all PCR and antigen tests reported to CDPHE and Routt County Public Health through **`r format(as.Date(params$DataUpdateDate), '%B %d, %Y')`**.  
-  
-This dashboard is intended to provide residents and visitors information about the community health of Routt County. The data reported reflects information the Colorado Department of Public Health and the Environment (CDPHE) collects to determine the status of each county's COVID-19 virus suppression. The data presented here complements the <a href="https://covid19.colorado.gov/data" target="_blank">state's data dashboards</a> by including data that is only available locally and presenting thresholds in locally-relevant numbers.   
 
+**<font size="5">Visit <a href="http://co.routt.co.us/883/COVID-19" target="_blank">http://co.routt.co.us/883/COVID-19</a> for information on COVID-19 in Routt County.</font>**
+
+# Introduction  
+
+**The COVID-19 landscape has changed dramatically over the last two years. Data collection and reporting has been an important part of Routt County Public Health’s pandemic response, and key to keeping the Routt County community informed. Today, Routt County Public Health announces changes in the collection of the COVID-19 information, where the information is housed, and what metrics will be displayed. These changes come after major surveillance change announcements from the Centers for Disease Control and Prevention (CDC) and the Colorado Department of Public Health and Environment (CDPHE) and “Colorado’s Next Chapter Roadmap Forward” released by Governor Polis.**  
+
+**To align with this statewide direction, Routt County Public Health has made the following changes:**  
+
+-	Beginning March 1, 2022, data on individual cases is no longer presented on the Routt County COVID-19 dashboard.
+-	Community level metrics including vaccination coverage and facility level characteristics will still be updated on the dashboard and are one tool to help inform individual and community level decisions about prevention strategies like mask use.
+-	Routt County Public Health will no longer conduct universal case investigation and contact tracing. Per an announcement by CDC on February 28, 2022, this type of surveillance is no longer recommended.  
+-	Information on hospitalizations and deaths will still be key indicators for our community to indicate severity of disease in our community and hospital system capacity. Routt County Public Health will continue to work with area hospitals to ensure reporting of hospitalizations as relevant for the phase of the pandemic.  
+
+
+This report includes cases reported to the Colorado Department of Public Health and Environment (CDPHE) and all PCR and antigen tests reported to CDPHE and Routt County Public Health through **`r format(as.Date(params$DataUpdateDate), '%B %d, %Y')`**.  
+
+Additional data on COVID-19 in Colorado and Routt County is available from CDPHE (<a href="https://https://covid19.colorado.gov/data" target="_blank">https://covid19.colorado.gov/data</a>) and CDC (<a href="https://www.cdc.gov/coronavirus/2019-ncov/science/community-levels.html" target="_blank">https://www.cdc.gov/coronavirus/2019-ncov/science/community-levels.html</a>).  
 
 We urge our residents and visitors to take public health prevention measures seriously to keep our county safe, healthy, and open for business and community events. Please note that the dashboard reflects data up to and including two days prior to the update date. Cases are reported by date of testing, and results from some previous weeks' tests are still pending, so case counts could change.  
 
 For details on data sources, definitions, and terms, please see the [References and Definitions](#Definitions) section.  
 
-Data is updated three times per week, for all dates reported.    
+Data is updated two times per week, for all dates reported.    
   
 # Key Metrics{#KeyMetrics}  
-The key metrics reflect the most recent two reporting weeks. For each indicator, the current two weeks are compared to the most recent prior two weeks. Here in Routt County, we are paying close attention to our test positivity rate and number of cases over two weeks. There is no single metric that tell us we are in a good or not good situation. However, **test positivity less than 5%** and/or **fewer than 52 cases in two weeks** will suggest we are in a good position.  
 
 ```{r, child = "../Shared-Resources/Child Rmd Files/RouttRoadToRecovery_Gauge.Rmd"}
 ```
@@ -80,10 +91,10 @@ The key metrics reflect the most recent two reporting weeks. For each indicator,
 ```{r, child = "../Shared-Resources/Child Rmd Files/CaseSummaryToDate.Rmd"}
 ```
 
-```{r, child = "../Shared-Resources/Child Rmd Files/MostRecent2Weeks1WeekSummary_Table.Rmd"}
+```{r, child = "../Shared-Resources/Child Rmd Files/MostRecent2Weeks1WeekSummary_Table.Rmd", eval = params$Internal}
 ```
 
-## Vaccination Data
+# Vaccination Data
 Vaccination data comes from the Colorado Immunization Information System, CIIS. This data is specific to Routt County residents independent of where they received their vaccine and does not include vaccine doses delivered by Routt County providers to non-Routt County residents. Individual records in CIIS are attributed based upon address provided by the individual when receiving a vaccine and medical records systems that report into CIIS. Therefore, Routt County's vaccination rates are impacted by CIIS data quality.    
 "Completed Vaccine Series" means that an individual has received both doses of a two-dose COVID-19 vaccine (i.e. Moderna or Pfizer) or the single dose of a one-dose COVID-19 vaccine (i.e. Janssen/J&J).  
   
@@ -117,13 +128,17 @@ PtIZ %>%
 ```
 
 # Graphs  
+
+```{r, child = "../Shared-Resources/Child Rmd Files/HOSPIT_14dayRollingSum.Rmd", eval = params$Internal}
+```
+
 ```{r, child = "../Shared-Resources/Child Rmd Files/Incidence-Daily14dayRollingAvg.Rmd"}
 ```
 
 ```{r, child = "../Shared-Resources/Child Rmd Files/Incidence-7dayRollingAvg.Rmd", eval = params$Internal}
 ```
 
-```{r, child = "../Shared-Resources/Child Rmd Files/Incidence-SchoolAgeNonSchoolAge14dayRolling.Rmd"}
+```{r, child = "../Shared-Resources/Child Rmd Files/Incidence-SchoolAgeNonSchoolAge14dayRolling.Rmd", eval = params$Internal}
 ```
 
 ```{r, child = "../Shared-Resources/Child Rmd Files/Incidence-Weekly14dayRollingAvg.Rmd", eval = params$Internal}
@@ -132,7 +147,7 @@ PtIZ %>%
 ```{r, child = "../Shared-Resources/Child Rmd Files/IncidenceReportDate.Rmd", eval = params$Internal}
 ```
 
-```{r, child = "../Shared-Resources/Child Rmd Files/Positivity.Rmd"}
+```{r, child = "../Shared-Resources/Child Rmd Files/Positivity.Rmd", eval = params$Internal}
 ```
 
 ```{r, child = "../Shared-Resources/Child Rmd Files/ResidentVisitorWeeklyCases.Rmd", eval = params$Internal}
@@ -141,31 +156,32 @@ PtIZ %>%
 ```{r, child = "../Shared-Resources/Child Rmd Files/PCRdelay.Rmd", eval = params$Internal}
 ```
     
-```{r, child = "../Shared-Resources/Child Rmd Files/Outbreaks.Rmd"}
+```{r, child = "../Shared-Resources/Child Rmd Files/Outbreaks.Rmd", eval = params$Internal}
 ```
   
+```{asis, echo = params$Internal}
 # Surveillance    
 This section provides summaries of the type of transmission for cases and is shown for both Routt County visitors and residents. Data is available for cases **beginning October 12, 2020**. Unlike other sections of the dashboard that use CEDRS data for cases, the source data is Routt County Public Health case investigation which means some resident cases may be included here that are not yet in CEDRS or vice versa.    
-
-```{r, child = "../Shared-Resources/Child Rmd Files/Surveillance-CaseOutcomes.Rmd"}
+```
+```{r, child = "../Shared-Resources/Child Rmd Files/Surveillance-CaseOutcomes.Rmd", eval = params$Internal}
 ```
 
 ```{r, child = "../Shared-Resources/Child Rmd Files/Surveillance-Symptoms.Rmd", eval = params$Internal}
 ```
 
-```{r, child = "../Shared-Resources/Child Rmd Files/Surveillance-ExposureTypeResidents.Rmd"}
+```{r, child = "../Shared-Resources/Child Rmd Files/Surveillance-ExposureTypeResidents.Rmd", eval = params$Internal}
 ```
 
 ```{r, child = "../Shared-Resources/Child Rmd Files/Surveillance-ExposureTypeVisitors.Rmd", eval = params$Internal}
 ```
 
-```{r, child = "../Shared-Resources/Child Rmd Files/Surveillance-VaxEfficacy.Rmd"}
+```{r, child = "../Shared-Resources/Child Rmd Files/Surveillance-VaxEfficacy.Rmd", eval = params$Internal}
 ```
 
 ```{r, child = "../Shared-Resources/Child Rmd Files/CICT Trends.Rmd", eval = params$Internal}
 ```
 
-```{r, child = "../Shared-Resources/Child Rmd Files/AllCasesSummary.Rmd"}
+```{r, child = "../Shared-Resources/Child Rmd Files/AllCasesSummary.Rmd", eval = params$Internal}
 ```
 
 
@@ -178,6 +194,7 @@ Cases are attributed to Routt County based upon the primary residence of the cas
 On October 29, 2021, CDPHE updated their dashboards to use 2020 population estimates available from the US Census. Neither ZIP code level nor single-year age population estimates are available and Routt County's dashboard uses these more granular estimates in some figures. Therefore, Routt County's dashboard continues to use 2019 population estimates. If and when 2020 population estimates at the ZIP code level and/or single-year age are available, this dashboard will be updated.  
   
 ## Updates by Date  
+**March 3, 20200**: Removed data on individual cases because Routt County Public Health stopped universal case investigation on March 1, 20222 in accordance with CDC guidance.  
 **January 27, 2022**: Added relevant definitions to Definitions section.    
 Routt County Public Health began removing graphs and context on this dashboard that no longer reflects the public health response to the pandemic or ongoing risk (i.e. the low, medium, and high-risk thresholds have been removed). New tables and graphs presenting information on vaccine breakthrough cases, reinfections, and vaccine booster doses were added.    
 **January 24, 2022**: Updated methodology for calculating vaccination number and percent to account for data nuances. This led to a decrease in the number and percentage of residents with one dose of a vaccine, but did not impact the number and percent fully vaccinated.  
@@ -228,17 +245,18 @@ Removed graph of Test Result Delay because most tests in the county are now run 
 **August 17, 2020**: Antigen positive test results added to the case definition for probable cases. All antigen positive test results after this date are included as probable cases in our case counts.  
 
 ## Definitions  
-**Cases** - all confirmed and probable cases are included in case counts. We are not including suspect cases. Antigen positive tests are included as a probable case for antigen tests completed on or after August 17, 2020. Routt County Public Health follows the case definition used by the Colorado department of Public Health and Environment, which is available here: <a href="https://docs.google.com/document/d/1e-IWLtzJNCgI2gzPONGvEASGgse85WuBmcToc9ev-74/edit " target="_blank">https://docs.google.com/document/d/1e-IWLtzJNCgI2gzPONGvEASGgse85WuBmcToc9ev-74/edit </a>   
+**Cases** - all confirmed and probable cases are included in case counts. We are not including suspect cases. Antigen positive tests are included as a probable case for proctored antigen tests (excludes tests done at-home) completed on or after August 17, 2020. Routt County Public Health follows the case definition used by the Colorado department of Public Health and Environment, which is available here: <a href="https://docs.google.com/document/d/1e-IWLtzJNCgI2gzPONGvEASGgse85WuBmcToc9ev-74/edit " target="_blank">https://docs.google.com/document/d/1e-IWLtzJNCgI2gzPONGvEASGgse85WuBmcToc9ev-74/edit </a>.  
+At-home antigen tests are counted as suspect cases and excluded from official case counts unless the case is reported to public health and case investigation determines the case meets probable case definition.
 **CDPHE** - Colorado Department of Public Health and Environment  
 **Completed Vaccination Series**: common term for describing that an individual has received all necessary doses of a vaccination series. This is often used in describing childhood immunizations that require multiple doses. There are COVID-19 vaccines that require only one dose as well as vaccines that require two doses. Having "completed the COVID-19 vaccination series" means an individual has received both doses of a 2-dose vaccine or one dose of a single-dose vaccine.  
 **Deaths** - consistent with CDPHE, deaths are reported as deaths among cases. Information on deaths due to COVID and the distinction is available from CDPHE: <a href="https://covid19.colorado.gov/data" target="_blank">https://covid19.colorado.gov/data</a>
 **Fully Vaccinated**: An individual is fully vaccinated when a full 14 days have passed since they completed the COVID-19 primary vaccination series. More information: <a href="https://www.cdc.gov/coronavirus/2019-ncov/vaccines/fully-vaccinated.html" target="_blank">https://www.cdc.gov/coronavirus/2019-ncov/vaccines/fully-vaccinated.html</a>    
 **Incidence** - number of new cases of a disease for a specific time period. Sometimes it is presented as a rate (incidence rate), such as the number of cases per 100,000 population. Incidence rates are helpful in comparing different communities to each other.  
 **Outbreak** - outbreak status is determined by epidemiologic case definition. Through June 30, 2021, an outbreak was defined as two or more cases of COVID-19 among non-household members associated with the same event or facility within a 14-day period. Beginning July 1, 2021, CDPHE updated the outbreak definition such that an outbreak in any setting other than residential care facilities or corrections requires at least 5 non-household members. Two or more cases in residential care facilities or corrections continues to meet outbreak definition.  
-**Reinfection** - a reinfection of COVID-19 is a second confirmed or probable case of COVID-19 in the same individual more than 90 days 
+**Reinfection** - a reinfection of COVID-19 is a second confirmed or probable case of COVID-19 in the same individual more than 90 days after initial diagnosis.  
 **Resident** - Individuals whose permanent address is in Routt County, excluding college students who are attending school outside of Routt County. Resident cases also includes individuals who reside in Routt County at least 6 months of the year.   
 **Tests** - there are many tests for COVID-19 that each fall into one of three categories: PCR, antigen, or antibody. Both PCR and antigen tests are used to diagnose active COVID-19 infections. PCR tests detect  viral genetic material, while antigen tests detect viral proteins. Antibody tests identify previous infections. We include both PCR and antigen tests (beginning September 21, 2020) in our total tests counts.  
 **Test Positivity** - a measure of the proportion of tests conducted that result in a positive test. PCR tests are generally used for this metric. We are using both PCR tests and antigen tests (beginning September 21, 2020) for the denominator of this percentage. The numerator is the number of people who tested positive.  
 **Up-to-Date on COVID-19 Vaccination** - a phrase to indicate that an individual has received all appropriate COVID-19 vaccine doses given their specific circumstances of age and timing of the primary series. more information: <a href="https://www.cdc.gov/coronavirus/2019-ncov/vaccines/stay-up-to-date.html" target="_blank:>https://www.cdc.gov/coronavirus/2019-ncov/vaccines/stay-up-to-date.html</a>  
-**Vaccine Breakthrough** - a case of COVID in an individual who is fully vaccinated (see definition above) when they test positive for COVID-19.  
+**Vaccine Breakthrough** - a case of COVID in an individual who is fully vaccinated (see definition above) when they test positive for COVID-19. A vaccine booster breakthrough is a case of COVID in an individual who is up-to-date on COVID-19 vaccination when they test positive for COVID-19.    
 **Visitor** - Individuals who received a COVID-19 test from a Routt County provider and spent time in Routt County while infectious.  
