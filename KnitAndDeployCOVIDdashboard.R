@@ -16,17 +16,17 @@ library(openxlsx)
 
 
 ##Set Parameters
-INTERNALparameters <- list(DataThroughDate = "2022-03-15",
-     MostRecentWeekStart = "2022-03-07",
+INTERNALparameters <- list(DataThroughDate = "2022-04-05",
+     MostRecentWeekStart = "2022-03-28",
      RouttPop = 25652,
-     DataUpdateDate = "2022-03-17",
+     DataUpdateDate = "2022-04-07",
      Internal = TRUE)
 
 
-PUBLICparameters <- list(DataThroughDate = "2022-03-15",
-                         MostRecentWeekStart = "2022-03-07",
+PUBLICparameters <- list(DataThroughDate = "2022-04-05",
+                         MostRecentWeekStart = "2022-03-28",
                          RouttPop = 25652,
-                         DataUpdateDate = "2022-03-17",
+                         DataUpdateDate = "2022-04-07",
                            Internal = FALSE)
 
 #use below when testing/troubleshooting indiv RMD files
